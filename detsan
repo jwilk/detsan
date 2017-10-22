@@ -1,0 +1,88 @@
+#!/usr/bin/env python3
+
+# Copyright © 2017 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
+import argparse
+import hashlib
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+
+lambda: (yield from 0)  # Python >= 3.3 is required
+
+def error(msg, *args, **kwargs):
+    prog = argparse.ArgumentParser().prog
+    msg = msg.format(*args, **kwargs)
+    print('{prog}: error: {msg}'.format(prog=prog, msg=msg))
+    sys.exit(1)
+
+def hash_file(path):
+    hasher = hashlib.sha256()
+    with open(path, 'rb') as file:
+        while True:
+            blob = file.read(1 << 20)
+            if not blob:
+                break
+            hasher.update(blob)
+    return hasher.digest()
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--sancov', default='sancov', help='path to sancov binary')
+    ap.add_argument('--max-tries', default=8, type=int)
+    ap.add_argument('command', metavar='COMMAND')
+    ap.add_argument('args', metavar='ARGS', nargs=argparse.REMAINDER)
+    options = ap.parse_args()
+    interest = {}
+    cmdline = [options.command] + options.args
+    with tempfile.TemporaryDirectory(prefix='detsan.') as tmpdir:
+        asan_options = os.environ.get('ASAN_OPTIONS') or ''
+        n = 0
+        while len(interest) < 2:
+            n += 1
+            if n > options.max_tries:
+                error('giving up after {n} tries'.format(n=options.max_tries))
+            covdir = '{dir}/{n}'.format(dir=tmpdir, n=n)
+            os.mkdir(covdir)
+            os.environ['ASAN_OPTIONS'] = asan_options + 'coverage=1:coverage_dir=' + covdir
+            subprocess.call(cmdline, stdout=subprocess.DEVNULL)
+            covfiles = list(os.listdir(covdir))
+            n_covfiles = len(covfiles)
+            if n_covfiles != 1:
+                if n_covfiles == 0:
+                    n_covfiles = 'no'
+                error('{n} coverage files were produced (expected one)'.format(n=n_covfiles))
+            [covfile] = covfiles
+            covfile = os.path.join(covdir, covfile)
+            h = hash_file(covfile)
+            if h in covfiles:
+                shutil.rmtree(covdir)
+                continue
+            else:
+                interest[h] = covfile
+        coverage = []
+        for h, covfile in sorted(interest.items()):
+            proc = subprocess.Popen(
+                [options.sancov, '-symbolize', covfile, options.command],
+                stdout=subprocess.PIPE
+            )
+            data = json.load(proc.stdout)
+            coverage += [frozenset(data['covered-points'])]
+            proc.wait()
+        data = data['point-symbol-info']
+        for path, file_info in data.items():
+            for func, func_info in file_info.items():
+                for ident, loc in func_info.items():
+                    in0 = ident in coverage[0]
+                    in1 = ident in coverage[1]
+                    if in0 ^ in1:
+                        print('{s} {file}:{loc} ({func})'.format(s='+-'[in0], file=path, loc=loc, func=func))
+
+if __name__ == '__main__':
+    main()
+
+# vim:ts=4 sts=4 sw=4 et
