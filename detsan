@@ -51,7 +51,11 @@ def main():
             covdir = '{dir}/{n}'.format(dir=tmpdir, n=n)
             os.mkdir(covdir)
             os.environ['ASAN_OPTIONS'] = asan_options + 'coverage=1:coverage_dir=' + covdir
-            subprocess.call(cmdline, stdout=subprocess.DEVNULL)
+            subprocess.call(cmdline,
+                stdin=subprocess.DEVNULL,
+                stdout=subprocess.DEVNULL,
+                stderr=subprocess.DEVNULL,
+            )
             covfiles = list(os.listdir(covdir))
             n_covfiles = len(covfiles)
             if n_covfiles != 1:
