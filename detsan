@@ -38,6 +38,8 @@ def main():
     ap.add_argument('args', metavar='ARGS', nargs=argparse.REMAINDER)
     options = ap.parse_args()
     interest = {}
+    if shutil.which(options.sancov) is None:
+        ap.error('sancov not found')
     cmdline = [options.command] + options.args
     with tempfile.TemporaryDirectory(prefix='detsan.') as tmpdir:
         asan_options = os.environ.get('ASAN_OPTIONS') or ''
