@@ -42,6 +42,7 @@ def main():
     if shutil.which(options.sancov) is None:
         ap.error('sancov not found')
     cmdline = [options.command] + options.args
+    os.environ['SANCOV_OPTIONS'] = 'symbolize=0'
     with tempfile.TemporaryDirectory(prefix='detsan.') as tmpdir:
         asan_options = os.environ.get('ASAN_OPTIONS') or ''
         n = 0
