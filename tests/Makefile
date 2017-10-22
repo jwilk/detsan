@@ -1,3 +1,4 @@
+PYTHON =
 CC = clang
 SANCOV = sancov
 
@@ -5,7 +6,7 @@ CFLAGS = -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address
 
 .PHONY: all
 all: target
-	../detsan --sancov=$(SANCOV) ./$(<)
+	$(PYTHON) ../detsan --sancov=$(SANCOV) ./$(<)
 
 target: target.c
 
