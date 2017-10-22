@@ -21,6 +21,7 @@ to help you find sources of non-determinism in C (or C++) programs.
        11   }
 
    $ clang -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address target.c -o target
+
    $ detsan ./target
    - /path/to/target.c:9:9 (main)
    + /path/to/target.c:7:9 (main)
