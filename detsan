@@ -5,6 +5,7 @@
 
 import argparse
 import hashlib
+import io
 import json
 import os
 import shutil
@@ -76,7 +77,8 @@ def main():
                 [options.sancov, '-symbolize', covfile, options.command],
                 stdout=subprocess.PIPE
             )
-            data = json.load(proc.stdout)
+            with io.TextIOWrapper(proc.stdout, encoding='UTF-8') as file:
+                data = json.load(file)
             coverage += [frozenset(data['covered-points'])]
             proc.wait()
         data = data['point-symbol-info']
