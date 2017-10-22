@@ -1,0 +1,35 @@
+Overview
+========
+
+**detsan** leverages `clang's code coverage instrumentation
+<https://clang.llvm.org/docs/SanitizerCoverage.html>`_
+to help you find sources of non-determinism in C (or C++) programs.
+
+.. code:: console
+
+   $ cat target.c
+   #include <stdio.h>
+   #include <unistd.h>
+   
+   int main(int argc, char **argv)
+   {
+       if (getpid() & 1)
+           puts("Looks like an odd pid to me!");
+       else
+           puts("An even pid? How quaint!");
+       return 0;
+   }
+   
+   $ clang -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address target.c -o target
+   $ detsan ./target
+   - /path/to/target.c:9:9 (main)
+   + /path/to/target.c:7:9 (main)
+
+Prerequisites
+=============
+
+* Python ≥ 3.3
+
+* Clang ≥ 4.0
+
+.. vim:ft=rst ts=3 sts=3 sw=3 et
