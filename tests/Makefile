@@ -8,6 +8,10 @@ CFLAGS = -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address
 all: target
 	$(PYTHON) ../detsan --sancov=$(SANCOV) ./$(<)
 
+.PHONY: clean
+clean:
+	rm -f target
+
 target: target.c
 
 # vim:ts=4 sts=4 sw=4 noet
