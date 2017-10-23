@@ -2,7 +2,7 @@ PYTHON =
 CC = clang
 SANCOV = sancov
 
-CFLAGS = -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address 
+CFLAGS = -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address
 
 .PHONY: all
 all: target
