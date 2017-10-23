@@ -9,22 +9,30 @@ to help you find sources of non-determinism in C (or C++) programs.
 
    $ cat -n target.c
         1   #include <stdio.h>
-        2   #include <unistd.h>
+        2   #include <stdlib.h>
         3
         4   int main(int argc, char **argv)
         5   {
-        6       if (getpid() & 1)
-        7           puts("Looks like an odd pid to me!");
-        8       else
-        9           puts("An even pid? How quaint!");
-       10       return 0;
-       11   }
+        6       FILE *fp = fopen("/dev/urandom", "r");
+        7       if (fp == NULL)
+        8           abort();
+        9       unsigned int v;
+       10       size_t r = fread(&v, sizeof v, 1, fp);
+       11       if (r != 1)
+       12           abort();
+       13       if (v & 1U)
+       14           puts("Looks like an odd number to me!");
+       15       else
+       16           puts("An even number? How quaint!");
+       17       fclose(fp);
+       18       return 0;
+       19   }
 
    $ clang -g -Og -fsanitize-coverage=trace-pc-guard -fsanitize=address target.c -o target
 
    $ detsan ./target
-   - /path/to/target.c:9:9 (main)
-   + /path/to/target.c:7:9 (main)
+   + /path/to/target.c:16:9 (main)
+   - /path/to/target.c:14:9 (main)
 
 Prerequisites
 =============
