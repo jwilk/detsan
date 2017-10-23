@@ -4,6 +4,7 @@
 # SPDX-License-Identifier: MIT
 
 import argparse
+import contextlib
 import hashlib
 import io
 import json
@@ -52,9 +53,14 @@ def main():
             stdout=subprocess.DEVNULL,
             stderr=subprocess.DEVNULL,
         )
+    input_path = None
     with tempfile.TemporaryDirectory(prefix='detsan.') as tmpdir:
         asan_options = os.environ.get('ASAN_OPTIONS') or ''
         n = 0
+        if not sys.stdin.isatty():
+            input_path = tmpdir + '/input'
+            with open(input_path, 'wb') as file:
+                shutil.copyfileobj(sys.stdin.buffer, file)
         while len(interest) < 2:
             n += 1
             if n > options.max_tries:
@@ -65,7 +71,12 @@ def main():
                 asan_options +
                 ':coverage=1:coverage_dir=' + covdir
             )
-            subprocess.call(cmdline, **stdio)
+            with contextlib.ExitStack() as stack:
+                if input_path is not None:
+                    input_file = open(input_path, 'rb')
+                    stack.enter_context(input_file)
+                    stdio.update(stdin=input_file)
+                subprocess.call(cmdline, **stdio)
             covfiles = list(os.listdir(covdir))
             n_covfiles = len(covfiles)
             if n_covfiles != 1:
