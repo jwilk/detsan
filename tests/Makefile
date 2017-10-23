@@ -8,7 +8,7 @@ CFLAGS += -fsanitize-coverage=trace-pc-guard -fsanitize=address
 
 .PHONY: all
 all: target
-	$(PYTHON) ../detsan --sancov=$(SANCOV) ./$(<)
+	$(PYTHON) ../detsan -p --sancov=$(SANCOV) ./$(<)
 
 .PHONY: clean
 clean:
