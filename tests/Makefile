@@ -1,3 +1,6 @@
+# Copyright © 2017 Jakub Wilk <jwilk@jwilk.net>
+# SPDX-License-Identifier: MIT
+
 PYTHON =
 CC = clang
 SANCOV = sancov
