@@ -1,6 +1,6 @@
 dist: trusty
 language: c
-matrix:
+jobs:
   include:
   - env: CLANG=clang-4.0
     addons:
