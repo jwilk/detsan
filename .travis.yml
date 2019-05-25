@@ -1,12 +1,10 @@
-dist: trusty
+dist: xenial
 language: c
 jobs:
   include:
   - env: CLANG=clang-4.0
     addons:
       apt:
-        sources:
-        - llvm-toolchain-trusty-4.0
         packages:
         - clang-4.0
         - python3-pip
@@ -14,11 +12,8 @@ jobs:
   - env: CLANG=clang-5.0
     addons:
       apt:
-        sources:
-        - llvm-toolchain-trusty-5.0
         packages:
         - clang-5.0
-        - clang-tools-5.0
         - python3-pip
         - python3-setuptools
 install:
