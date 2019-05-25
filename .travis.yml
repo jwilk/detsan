@@ -16,6 +16,14 @@ jobs:
         - clang-5.0
         - python3-pip
         - python3-setuptools
+  - env: CLANG=clang-6.0
+    addons:
+      apt:
+        packages:
+        - clang-6.0
+        - clang-tools-6.0
+        - python3-pip
+        - python3-setuptools
 install:
 - python3 -m pip install --user pydiatra pyflakes
 - python3 -m pip install --user pygments restructuredtext-lint
