@@ -5,7 +5,7 @@ PYTHON =
 CC = clang
 SANCOV = sancov
 
-CFLAGS = -g -Og
+CFLAGS = -g
 CFLAGS += -Wall
 CFLAGS += -fsanitize-coverage=trace-pc-guard -fsanitize=address
 
