@@ -20,7 +20,7 @@ import tempfile
 def error(msg, *args, **kwargs):
     prog = argparse.ArgumentParser().prog
     msg = msg.format(*args, **kwargs)
-    print('{prog}: error: {msg}'.format(prog=prog, msg=msg))
+    print(f'{prog}: error: {msg}')
     sys.exit(1)
 
 def hash_file(path):
@@ -65,8 +65,8 @@ def main():
         while len(interest) < 2:
             n += 1
             if n > options.max_tries:
-                error('giving up after {n} tries'.format(n=options.max_tries))
-            covdir = '{dir}/{n}'.format(dir=tmpdir, n=n)
+                error(f'giving up after {options.max_tries} tries')
+            covdir = f'{tmpdir}/{n}'
             os.mkdir(covdir)
             os.environ['ASAN_OPTIONS'] = (
                 asan_options +
@@ -83,7 +83,7 @@ def main():
             if n_covfiles != 1:
                 if n_covfiles == 0:
                     n_covfiles = 'no'
-                error('{n} coverage files were produced (expected one)'.format(n=n_covfiles))
+                error(f'{n_covfiles} coverage files were produced (expected one)')
             [covfile] = covfiles
             covfile = os.path.join(covdir, covfile)
             h = hash_file(covfile)
