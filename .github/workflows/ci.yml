@@ -8,13 +8,13 @@ jobs:
       matrix:
         include:
         - clang: clang-4.0
-          python: python-3.3
+          python: python-3.6
           os: ubuntu-18.04
         - clang: clang-5.0
-          python: python-3.4
+          python: python-3.6
           os: ubuntu-18.04
         - clang: clang-6.0
-          python: python-3.5
+          python: python-3.6
           os: ubuntu-18.04
         - clang: clang-7
           python: python-3.6

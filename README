@@ -37,7 +37,7 @@ to help you find sources of non-determinism in C (or C++) programs.
 Prerequisites
 =============
 
-* Python ≥ 3.3
+* Python ≥ 3.6
 
 * Clang ≥ 4.0
 
