@@ -45,7 +45,7 @@ jobs:
         clang: ${{matrix.clang}}
         python: ${{matrix.python}}
     - name: set up Python ${{env.python-ver}}
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5
       with:
         python-version: ${{env.python-ver}}
     - name: set up APT
