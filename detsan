@@ -44,7 +44,7 @@ def main():
     interest = {}
     if shutil.which(options.sancov) is None:
         ap.error('sancov not found')
-    cmdline = [options.command] + options.args
+    cmdline = [options.command, *options.args]
     os.environ['SANCOV_OPTIONS'] = 'symbolize=0'
     stdio = dict(
         stdin=subprocess.DEVNULL,
