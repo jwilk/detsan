@@ -36,7 +36,8 @@ def hash_file(path):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--sancov', default='sancov', help='path to sancov binary')
-    ap.add_argument('--max-tries', metavar='N', default=8, type=int, help='run target program at most N times')
+    def_max_tries = 8
+    ap.add_argument('--max-tries', metavar='N', default=def_max_tries, type=int, help=f'run target program at most N times (default: {def_max_tries})')
     ap.add_argument('-p', '--pass-stdio', action='store_true', help="don't redirect target's stdout/stderr to /dev/null")
     ap.add_argument('command', metavar='COMMAND')
     ap.add_argument('args', metavar='ARGS', nargs=argparse.REMAINDER)
