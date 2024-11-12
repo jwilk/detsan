@@ -37,6 +37,15 @@ jobs:
         - clang: clang-15
           python: python-3.12
           os: ubuntu-22.04
+        - clang: clang-16
+          python: python-3.13
+          os: ubuntu-24.04
+        - clang: clang-17
+          python: python-3.13
+          os: ubuntu-24.04
+        - clang: clang-18
+          python: python-3.13
+          os: ubuntu-24.04
     runs-on: ${{matrix.os}}
     steps:
     - uses: actions/checkout@v4
