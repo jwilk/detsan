@@ -7,32 +7,17 @@ jobs:
     strategy:
       matrix:
         include:
-        - clang: clang-6.0
-          python: python-3.6
-          os: ubuntu-20.04
-        - clang: clang-7
-          python: python-3.6
-          os: ubuntu-20.04
-        - clang: clang-8
-          python: python-3.7
-          os: ubuntu-20.04
-        - clang: clang-9
-          python: python-3.8
-          os: ubuntu-20.04
-        - clang: clang-10
-          python: python-3.9
-          os: ubuntu-20.04
         - clang: clang-11
-          python: python-3.10
-          os: ubuntu-20.04
+          python: python-3.8
+          os: ubuntu-22.04
         - clang: clang-12
-          python: python-3.11
+          python: python-3.9
           os: ubuntu-22.04
         - clang: clang-13
-          python: python-3.11
+          python: python-3.10
           os: ubuntu-22.04
         - clang: clang-14
-          python: python-3.12
+          python: python-3.11
           os: ubuntu-22.04
         - clang: clang-15
           python: python-3.12
