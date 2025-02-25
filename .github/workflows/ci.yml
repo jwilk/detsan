@@ -7,9 +7,6 @@ jobs:
     strategy:
       matrix:
         include:
-        - clang: clang-11
-          python: python-3.8
-          os: ubuntu-22.04
         - clang: clang-12
           python: python-3.9
           os: ubuntu-22.04
